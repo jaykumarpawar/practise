@@ -11,20 +11,16 @@ import {
 import path from "path";
 
 // Register Carlito font (Google Font, close to Calibri)
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH
+  ? `/${process.env.NEXT_PUBLIC_BASE_PATH}`
+  : "";
+
 Font.register({
   family: "Calibri",
   fonts: [
-    {
-      src: path.join(process.cwd(), "/fonts/calibri-regular.ttf"),
-    },
-    {
-      src: path.join(process.cwd(), "/fonts/calibri-bold.ttf"),
-      fontWeight: "bold",
-    },
-    {
-      src: path.join(process.cwd(), "/fonts/calibri-italic.ttf"),
-      fontStyle: "italic",
-    },
+    { src: `${basePath}/fonts/calibri-regular.ttf` },
+    { src: `${basePath}/fonts/calibri-bold.ttf`, fontWeight: "bold" },
+    { src: `${basePath}/fonts/calibri-italic.ttf`, fontStyle: "italic" },
   ],
 });
 
