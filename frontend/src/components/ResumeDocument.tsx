@@ -1,4 +1,4 @@
-// components/ResumeDocument.tsx
+"use client";
 
 import {
   Document,
@@ -8,12 +8,12 @@ import {
   StyleSheet,
   Font,
 } from "@react-pdf/renderer";
-import path from "path";
 
-// Register Carlito font (Google Font, close to Calibri)
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH
-  ? `/${process.env.NEXT_PUBLIC_BASE_PATH}`
-  : "";
+// Register Calibri (from /public/fonts/)
+const basePath =
+  process.env.NEXT_PUBLIC_BASE_PATH && process.env.NODE_ENV === "production"
+    ? `/${process.env.NEXT_PUBLIC_BASE_PATH}`
+    : "";
 
 Font.register({
   family: "Calibri",
@@ -36,14 +36,14 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   name: {
-    fontSize: 11,
+    fontSize: 14,
     fontWeight: "bold",
     marginBottom: 6,
     borderBottom: "1pt solid black",
     paddingBottom: 6,
   },
   contact: {
-    fontSize: 11,
+    fontSize: 10,
     color: "gray",
   },
   section: {
@@ -53,10 +53,10 @@ const styles = StyleSheet.create({
     fontSize: 11,
     textAlign: "center",
     fontWeight: "bold",
-    // marginBottom: 6,
-    // textTransform: "uppercase",
-    // borderBottom: "1pt solid black",
-    paddingBottom: 6,
+    marginBottom: 6,
+    borderBottom: "0.5pt solid #444",
+    paddingBottom: 3,
+    textTransform: "uppercase",
   },
   entry: {
     marginBottom: 8,
@@ -72,31 +72,43 @@ const styles = StyleSheet.create({
   role: {
     fontSize: 11,
     fontStyle: "italic",
+    marginBottom: 2,
   },
   bullets: {
     marginLeft: 12,
-    marginTop: 6,
+    marginTop: 4,
+  },
+  bulletRow: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    marginBottom: 2,
   },
   bullet: {
-    fontSize: 12,
+    fontSize: 11,
+    marginRight: 4,
   },
-  list: {
-    display: "flex",
-    flexDirection: "column",
-  },
-  listItem: {
-    display: "flex",
-    flexDirection: "row",
-    gap: 8,
-    width: "100%",
-  },
-  text: {
+  bulletText: {
     fontSize: 11,
     flex: 1,
-    paddingBottom: 0,
-    marginBottom: 0,
   },
 });
+
+function formatDateRange(start?: string, end?: string, current?: boolean) {
+  if (!start) return "";
+  const startStr = new Date(start).toLocaleDateString("en-US", {
+    month: "short",
+    year: "numeric",
+  });
+  const endStr = current
+    ? "Present"
+    : end
+    ? new Date(end).toLocaleDateString("en-US", {
+        month: "short",
+        year: "numeric",
+      })
+    : "";
+  return `${startStr} – ${endStr}`;
+}
 
 export default function ResumeDocument({ data }: { data: any }) {
   return (
@@ -118,9 +130,7 @@ export default function ResumeDocument({ data }: { data: any }) {
           {data.education?.map((edu: any, idx: number) => (
             <View key={idx} style={styles.entry}>
               <View style={styles.entryHeader}>
-                <Text style={styles.org}>
-                  {edu.school || "University Name"}
-                </Text>
+                <Text style={styles.org}>{edu.school || "University Name"}</Text>
                 <Text>{edu.date || "Graduation Date"}</Text>
               </View>
               <Text>{edu.degree || "Degree, Major"}</Text>
@@ -132,30 +142,36 @@ export default function ResumeDocument({ data }: { data: any }) {
         {/* Experience */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Experience</Text>
-          <View style={styles.entry}>
-            <View style={styles.entryHeader}>
-              <Text style={styles.org}>{data.expOrg || "Organization"}</Text>
-              <Text>{data.expDate || "Month Year – Month Year"}</Text>
+          {data.experiences?.map((exp: any, idx: number) => (
+            <View key={idx} style={styles.entry}>
+              <View style={styles.entryHeader}>
+                <Text style={styles.org}>{exp.org || "Organization"}</Text>
+                <Text>
+                  {formatDateRange(exp.startDate, exp.endDate, exp.current) ||
+                    "Month Year – Month Year"}
+                </Text>
+              </View>
+              <Text style={styles.role}>{exp.role || "Position Title"}</Text>
+              <View style={styles.bullets}>
+                {(exp.bullets?.length
+                  ? exp.bullets
+                  : [
+                      "Describe experience in bullet points.",
+                      "Start with action verbs.",
+                      "Quantify where possible.",
+                    ]
+                ).map((b: string, i: number) => (
+                  <View key={i} style={styles.bulletRow}>
+                    <Text style={styles.bullet}>•</Text>
+                    <Text style={styles.bulletText}>{b}</Text>
+                  </View>
+                ))}
+              </View>
             </View>
-            <Text style={styles.role}>{data.expRole || "Position Title"}</Text>
-            <View style={styles.bullets}>
-              {(
-                data.expBullets.length || [
-                  "Describe experience in bullet points.",
-                  "Start with action verbs.",
-                  "Quantify where possible.",
-                ]
-              ).map((b: string, i: number) => (
-                <View style={styles.listItem} key={i}>
-                  <Text style={styles.bullet}>{"\u2022"}</Text>
-                  <Text style={styles.text}>{b}</Text>
-                </View>
-              ))}
-            </View>
-          </View>
+          ))}
         </View>
 
-        {/* Skills & Interests */}
+        {/* Skills */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Skills</Text>
           <Text>
