@@ -25,11 +25,11 @@ jobs:
 
       # Build all services
       - name: Build Docker images
-        run: docker-compose build
+        run: docker compose build
 
       # Run containers (detached)
       - name: Run containers
-        run: docker-compose up -d
+        run: docker compose up -d
 
       # Verify backend health
       - name: Check backend health
