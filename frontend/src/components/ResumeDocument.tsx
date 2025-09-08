@@ -8,20 +8,21 @@ import {
   StyleSheet,
   Font,
 } from "@react-pdf/renderer";
+import path from "path";
 
 // Register Carlito font (Google Font, close to Calibri)
 Font.register({
   family: "Calibri",
   fonts: [
     {
-      src: "/fonts/calibri-regular.ttf",
+      src: path.join(process.cwd(), "/fonts/calibri-regular.ttf"),
     },
     {
-      src: "/fonts/calibri-bold.ttf",
+      src: path.join(process.cwd(), "/fonts/calibri-bold.ttf"),
       fontWeight: "bold",
     },
     {
-      src: "/fonts/calibri-italic.ttf",
+      src: path.join(process.cwd(), "/fonts/calibri-italic.ttf"),
       fontStyle: "italic",
     },
   ],
