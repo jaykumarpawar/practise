@@ -1,0 +1,43 @@
+services:
+  # Backend (NestJS)
+  backend:
+    build: ./backend
+    container_name: resume_backend
+    restart: always
+    working_dir: /usr/src/app
+    command: npm run start:dev
+    volumes:
+      - ./backend:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env.backend
+    environment:
+      CHOKIDAR_USEPOLLING: "true"
+      CHOKIDAR_INTERVAL: "1000"
+    networks:
+      - resume_net
+
+  # Frontend (Next.js)
+  frontend:
+    build: ./frontend
+    container_name: resume_frontend
+    restart: always
+    command: npm run dev
+    working_dir: /usr/src/app
+    volumes:
+      - ./frontend:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.frontend
+    environment:
+      - WATCHPACK_POLLING=true
+    networks:
+      - resume_net
+
+networks:
+  resume_net:
+    driver: bridge
