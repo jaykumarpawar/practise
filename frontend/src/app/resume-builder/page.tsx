@@ -1,10 +1,17 @@
 // frontend/app/resume-builder/page.tsx
 "use client";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { PDFViewer } from "@react-pdf/renderer";
-import { debounce } from "lodash";
+import { useEffect, useState } from "react";
+// import { PDFViewer } from "@react-pdf/renderer";
+import { debounce } from "lodash"
 import ResumeDocument from "@/components/ResumeDocument";
 import { useDebounce } from "../hooks/useDebounce";
+import dynamic from "next/dynamic";
+
+// Dynamically import PDFViewer only on client
+const PDFViewer = dynamic(
+  () => import("@react-pdf/renderer").then((mod) => mod.PDFViewer),
+  { ssr: false }
+);
 
 export default function ResumeBuilder() {
   const [formData, setFormData] = useState({

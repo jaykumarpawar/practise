@@ -7,8 +7,6 @@ import {
   View,
   StyleSheet,
   Font,
-  Svg,
-  Circle,
 } from "@react-pdf/renderer";
 
 // Register Carlito font (Google Font, close to Calibri)
