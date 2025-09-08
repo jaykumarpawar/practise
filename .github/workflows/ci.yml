@@ -1,0 +1,40 @@
+name: Docker CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      # Set up Docker Buildx
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # (Optional) Log in if you want to push to Docker Hub
+      # - name: Log in to DockerHub
+      #   uses: docker/login-action@v2
+      #   with:
+      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
+      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Build all services
+      - name: Build Docker images
+        run: docker-compose build
+
+      # Run containers (detached)
+      - name: Run containers
+        run: docker-compose up -d
+
+      # Verify backend health
+      - name: Check backend health
+        run: curl --fail http://localhost:5000/health || exit 1
+
+      # Verify frontend health
+      - name: Check frontend health
+        run: curl --fail http://localhost:3000 || exit 1
