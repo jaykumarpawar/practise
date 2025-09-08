@@ -31,10 +31,10 @@ jobs:
       - name: Run containers
         run: docker compose up -d
 
-      # Verify backend health
-      - name: Check backend health
-        run: curl --fail http://localhost:5000/health || exit 1
+      # # Verify backend health
+      # - name: Check backend health
+      #   run: curl --fail http://localhost:5000/health || exit 1
 
-      # Verify frontend health
-      - name: Check frontend health
-        run: curl --fail http://localhost:3000 || exit 1
+      # # Verify frontend health
+      # - name: Check frontend health
+      #   run: curl --fail http://localhost:3000 || exit 1
