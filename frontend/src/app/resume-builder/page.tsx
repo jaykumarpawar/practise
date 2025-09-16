@@ -6,6 +6,7 @@ import { useDebounce } from "../hooks/useDebounce";
 import EducationForm from "@/components/EducationForm";
 import ExperienceForm from "@/components/ExperienceForm";
 import SkillsForm, { SkillCategory } from "@/components/SkillsForm";
+import { getAssetUrl } from "@/utils/urlUtility";
 
 const formStructure = {
   name: "",
@@ -95,7 +96,7 @@ export default function ResumeBuilder() {
               );
               if (!confirmed) return;
 
-              const res = await fetch("/demo-data.json");
+              const res = await fetch(getAssetUrl("/demo-data.json"));
               const demoData = await res.json();
               setFormData(demoData);
             }}
