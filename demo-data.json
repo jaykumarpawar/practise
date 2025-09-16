@@ -1,0 +1,76 @@
+{
+  "name": "John Doe",
+  "address": "123 Main Street, New York, NY 10001",
+  "email": "john.doe@example.com",
+  "phone": "+1 (555) 123-4567",
+  "education": [
+    {
+      "school": "Harvard University",
+      "degree": "Bachelor of Computer Science",
+      "date": "May 2020",
+      "details": "Graduated with Honors, GPA: 3.9/4.0"
+    },
+    {
+      "school": "Stanford University",
+      "degree": "Master of Software Engineering",
+      "date": "Aug 2022",
+      "details": "Specialized in AI & Machine Learning"
+    }
+  ],
+  "experiences": [
+    {
+      "org": "OpenAI",
+      "role": "Senior Software Engineer",
+      "startDate": "2020-06",
+      "endDate": "2023-08",
+      "current": false,
+      "bullets": [
+        "Led a team of 5 engineers to build AI-driven applications",
+        "Optimized inference pipeline, improving response time by 30%",
+        "Collaborated with cross-functional teams on research projects"
+      ]
+    },
+    {
+      "org": "Google",
+      "role": "Software Engineer",
+      "startDate": "2018-01",
+      "endDate": "2020-05",
+      "current": false,
+      "bullets": [
+        "Developed scalable microservices for search ranking",
+        "Improved system availability from 95% to 99.9%",
+        "Mentored junior developers and conducted code reviews"
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "title": "Technical Skills",
+      "items": [
+        "JavaScript",
+        "React",
+        "Next.js",
+        "NestJS",
+        "Node.js",
+        "Docker",
+        "PostgreSQL"
+      ]
+    },
+    {
+      "title": "Soft Skills",
+      "items": [
+        "Team Leadership",
+        "Communication",
+        "Problem-Solving",
+        "Time Management"
+      ]
+    },
+    {
+      "title": "Languages",
+      "items": [
+        "English",
+        "Spanish"
+      ]
+    }
+  ]
+}
