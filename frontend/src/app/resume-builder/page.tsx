@@ -7,6 +7,25 @@ import EducationForm from "@/components/EducationForm";
 import ExperienceForm from "@/components/ExperienceForm";
 import SkillsForm, { SkillCategory } from "@/components/SkillsForm";
 
+const formStructure = {
+  name: "",
+  address: "",
+  email: "",
+  phone: "",
+  education: [{ school: "", degree: "", date: "", details: "" }],
+  experiences: [
+    {
+      org: "",
+      role: "",
+      startDate: "",
+      endDate: "",
+      current: false,
+      bullets: [] as string[],
+    },
+  ],
+  skills: [{ title: "Technical skills", items: [""] }],
+};
+
 const PDFViewer = dynamic(
   () => import("@react-pdf/renderer").then((mod) => mod.PDFViewer),
   { ssr: false }
@@ -14,24 +33,7 @@ const PDFViewer = dynamic(
 
 export default function ResumeBuilder() {
   const count = useRef(0);
-  const [formData, setFormData] = useState({
-    name: "",
-    address: "",
-    email: "",
-    phone: "",
-    education: [{ school: "", degree: "", date: "", details: "" }],
-    experiences: [
-      {
-        org: "",
-        role: "",
-        startDate: "",
-        endDate: "",
-        current: false,
-        bullets: [] as string[],
-      },
-    ],
-    skills: [{ title: "Technical skills", items: [""] }],
-  });
+  const [formData, setFormData] = useState(formStructure);
 
   const debouncedFormData = useDebounce(formData, 1000);
   useEffect(() => {
@@ -105,24 +107,11 @@ export default function ResumeBuilder() {
             type="button"
             className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition"
             onClick={() => {
-              setFormData({
-                name: "",
-                address: "",
-                email: "",
-                phone: "",
-                education: [{ school: "", degree: "", date: "", details: "" }],
-                experiences: [
-                  {
-                    org: "",
-                    role: "",
-                    startDate: "",
-                    endDate: "",
-                    current: false,
-                    bullets: [],
-                  },
-                ],
-                skills: [{ title: "", items: [""] }],
-              });
+              const confirmed = window.confirm(
+                "Are you sure you want to reset? Your current form data will be lost."
+              );
+              if (!confirmed) return;
+              setFormData(formStructure);
             }}
           >
             Reset Form
