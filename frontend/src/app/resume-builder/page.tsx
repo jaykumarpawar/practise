@@ -5,6 +5,7 @@ import ResumeDocument from "@/components/ResumeDocument";
 import { useDebounce } from "../hooks/useDebounce";
 import EducationForm from "@/components/EducationForm";
 import ExperienceForm from "@/components/ExperienceForm";
+import SkillsForm, { SkillCategory } from "@/components/SkillsForm";
 
 const PDFViewer = dynamic(
   () => import("@react-pdf/renderer").then((mod) => mod.PDFViewer),
@@ -29,7 +30,7 @@ export default function ResumeBuilder() {
         bullets: [] as string[],
       },
     ],
-    skills: "",
+    skills: [{ title: "Technical skills", items: [""] }],
   });
 
   const debouncedFormData = useDebounce(formData, 1000);
@@ -40,55 +41,92 @@ export default function ResumeBuilder() {
   return (
     <div className="flex h-screen">
       {/* Left - Form */}
-      <div className="w-1/2 p-6 overflow-y-auto bg-gray-50 space-y-6">
+      <div className="w-1/2 p-6 pb-32 overflow-y-auto bg-gray-50">
         <h2 className="text-2xl font-bold mb-6">Resume Form</h2>
-
-        {/* Header */}
-        <div>
-          <h3 className="font-semibold text-lg mb-2">Header</h3>
-          {["name", "address", "email", "phone"].map((field) => (
-            <input
-              key={field}
-              name={field}
-              value={(formData as any)[field]}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, [field]: e.target.value }))
-              }
-              placeholder={field[0].toUpperCase() + field.slice(1)}
-              className="w-full border rounded-lg p-2 mb-2"
-            />
-          ))}
-        </div>
-
-        {/* Education */}
-        <EducationForm
-          education={formData.education}
-          setEducation={(education) =>
-            setFormData((prev) => ({ ...prev, education }))
-          }
-        />
-
-        {/* Experience */}
-        <ExperienceForm
-          experiences={formData.experiences}
-          setExperiences={(experiences) =>
-            setFormData((prev) => ({ ...prev, experiences }))
-          }
-        />
-
-        {/* Skills */}
-        <div>
-          <h3 className="font-semibold text-lg mb-2">Skills & Interests</h3>
-          <textarea
-            name="skills"
-            value={formData.skills}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, skills: e.target.value }))
+        <form className="space-y-6">
+          {/* Header */}
+          <div>
+            <h3 className="font-semibold text-lg mb-2">Header</h3>
+            {["name", "address", "email", "phone"].map((field) => (
+              <input
+                key={field}
+                name={field}
+                value={(formData as any)[field]}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, [field]: e.target.value }))
+                }
+                placeholder={field[0].toUpperCase() + field.slice(1)}
+                className="w-full border rounded-lg p-2 mb-2"
+              />
+            ))}
+          </div>
+          {/* Education */}
+          <EducationForm
+            education={formData.education}
+            setEducation={(education) =>
+              setFormData((prev) => ({ ...prev, education }))
             }
-            placeholder="E.g. React, NestJS • Languages: English • Interests: Hiking"
-            className="w-full border rounded-lg p-2"
-            rows={2}
           />
+          {/* Experience */}
+          <ExperienceForm
+            experiences={formData.experiences}
+            setExperiences={(experiences) =>
+              setFormData((prev) => ({ ...prev, experiences }))
+            }
+          />
+          {/* Skills */}
+          <SkillsForm
+            skills={formData.skills}
+            setSkills={(skills: SkillCategory[]) =>
+              setFormData((prev) => ({ ...prev, skills }))
+            }
+          />
+        </form>
+        {/* Fixed Bottom Buttons */}
+        <div className="fixed bottom-0 left-0 w-1/2 bg-white border-t p-4 flex justify-around">
+          <button
+            type="button"
+            className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition"
+            onClick={async () => {
+              const confirmed = window.confirm(
+                "Are you sure you want to load demo data? Your current form data will be lost."
+              );
+              if (!confirmed) return;
+
+              const res = await fetch("/demo-data.json");
+              const demoData = await res.json();
+              setFormData(demoData);
+            }}
+          >
+            Load Demo Data
+          </button>
+
+          <button
+            type="button"
+            className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition"
+            onClick={() => {
+              setFormData({
+                name: "",
+                address: "",
+                email: "",
+                phone: "",
+                education: [{ school: "", degree: "", date: "", details: "" }],
+                experiences: [
+                  {
+                    org: "",
+                    role: "",
+                    startDate: "",
+                    endDate: "",
+                    current: false,
+                    bullets: [],
+                  },
+                ],
+                skills: [{ title: "", items: [""] }],
+              });
+            }}
+          >
+            Reset Form
+          </button>
         </div>
       </div>
 

@@ -40,13 +40,17 @@ export default function EducationForm({ education, setEducation }: Props) {
               className="w-full border rounded-lg p-2 mb-2"
             />
           ))}
-          <button
-            type="button"
-            className="mt-2 text-red-600 text-sm rounded border px-2 py-1"
-            onClick={() => setEducation(education.filter((_, i) => i !== idx))}
-          >
-            Remove
-          </button>
+          {idx !== 0 && (
+            <button
+              type="button"
+              className="mt-2 text-red-600 text-sm rounded-lg border py-1 px-2 bg-white hover:bg-red-600 hover:text-white transition-colors duration-300"
+              onClick={() =>
+                setEducation(education.filter((_, i) => i !== idx))
+              }
+            >
+              Remove
+            </button>
+          )}
         </div>
       ))}
       <button

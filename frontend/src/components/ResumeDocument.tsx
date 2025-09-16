@@ -1,28 +1,8 @@
 "use client";
 
-import {
-  Document,
-  Page,
-  Text,
-  View,
-  StyleSheet,
-  Font,
-} from "@react-pdf/renderer";
-
-// Register Calibri (from /public/fonts/)
-const basePath =
-  process.env.NEXT_PUBLIC_BASE_PATH && process.env.NODE_ENV === "production"
-    ? `/${process.env.NEXT_PUBLIC_BASE_PATH}`
-    : "";
-
-Font.register({
-  family: "Calibri",
-  fonts: [
-    { src: `${basePath}/fonts/calibri-regular.ttf` },
-    { src: `${basePath}/fonts/calibri-bold.ttf`, fontWeight: "bold" },
-    { src: `${basePath}/fonts/calibri-italic.ttf`, fontStyle: "italic" },
-  ],
-});
+import { useEffect } from "react";
+import { registerFonts } from "@/utils/registerFonts";
+import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
 
 const styles = StyleSheet.create({
   page: {
@@ -111,6 +91,9 @@ function formatDateRange(start?: string, end?: string, current?: boolean) {
 }
 
 export default function ResumeDocument({ data }: { data: any }) {
+  useEffect(() => {
+    registerFonts();
+  }, []);
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -130,7 +113,9 @@ export default function ResumeDocument({ data }: { data: any }) {
           {data.education?.map((edu: any, idx: number) => (
             <View key={idx} style={styles.entry}>
               <View style={styles.entryHeader}>
-                <Text style={styles.org}>{edu.school || "University Name"}</Text>
+                <Text style={styles.org}>
+                  {edu.school || "University Name"}
+                </Text>
                 <Text>{edu.date || "Graduation Date"}</Text>
               </View>
               <Text>{edu.degree || "Degree, Major"}</Text>
@@ -174,10 +159,12 @@ export default function ResumeDocument({ data }: { data: any }) {
         {/* Skills */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Skills</Text>
-          <Text>
-            {data.skills ||
-              "Technical: List tools • Language: List languages • Interests: List hobbies"}
-          </Text>
+          {data.skills?.map((cat: any, idx: number) => (
+            <View key={idx} style={{ marginBottom: 4 }}>
+              <Text style={{ fontWeight: "bold" }}>{cat.title}</Text>
+              <Text>{cat.items.filter(Boolean).join(" • ")}</Text>
+            </View>
+          ))}
         </View>
       </Page>
     </Document>
