@@ -26,18 +26,18 @@ export default function ExperienceForm({ experiences, setExperiences }: Props) {
     <div>
       <h3 className="font-semibold text-lg mb-2">Experience</h3>
       {experiences.map((exp, idx) => (
-        <div key={idx} className="mb-4 border p-3 rounded-lg bg-white">
+        <div key={idx} className="mb-4 border p-3 rounded bg-white">
           <input
             value={exp.org}
             onChange={(e) => handleChange(idx, "org", e.target.value)}
             placeholder="Organization"
-            className="w-full border rounded-lg p-2 mb-2"
+            className="w-full border rounded p-2 mb-2"
           />
           <input
             value={exp.role}
             onChange={(e) => handleChange(idx, "role", e.target.value)}
             placeholder="Role / Position"
-            className="w-full border rounded-lg p-2 mb-2"
+            className="w-full border rounded p-2 mb-2"
           />
 
           {/* Start + End Dates */}
@@ -46,13 +46,13 @@ export default function ExperienceForm({ experiences, setExperiences }: Props) {
               type="month"
               value={exp.startDate}
               onChange={(e) => handleChange(idx, "startDate", e.target.value)}
-              className="border rounded-lg p-2 flex-1"
+              className="border rounded p-2 flex-1"
             />
             <input
               type="month"
               value={exp.endDate}
               onChange={(e) => handleChange(idx, "endDate", e.target.value)}
-              className="border rounded-lg p-2 flex-1"
+              className="border rounded p-2 flex-1"
               disabled={exp.current}
             />
           </div>
@@ -73,14 +73,14 @@ export default function ExperienceForm({ experiences, setExperiences }: Props) {
               handleChange(idx, "bullets", e.target.value.split("\n"))
             }
             placeholder="Bullet points (one per line)"
-            className="w-full border rounded-lg p-2"
+            className="w-full border rounded p-2"
             rows={4}
           />
 
           {idx !== 0 && (
             <button
               type="button"
-              className="mt-2 text-red-600 text-sm rounded-lg border py-1 px-2 bg-white hover:bg-red-600 hover:text-white transition-colors duration-300"
+              className="mt-2 text-red-600 text-sm rounded border py-1 px-2 bg-white hover:bg-red-600 hover:text-white transition-colors duration-300"
               onClick={() =>
                 setExperiences(experiences.filter((_, i) => i !== idx))
               }
@@ -92,7 +92,7 @@ export default function ExperienceForm({ experiences, setExperiences }: Props) {
       ))}
       <button
         type="button"
-        className="bg-blue-600 text-white px-3 py-1 rounded-lg"
+        className="bg-blue-600 text-white px-3 py-1 rounded"
         onClick={() =>
           setExperiences([
             ...experiences,

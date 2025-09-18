@@ -110,7 +110,7 @@ export default function SkillsForm({ skills, setSkills }: SkillsSectionProps) {
       {/* Add Category Button */}
       <button
         type="button"
-        className="bg-blue-600 text-white px-3 py-1 rounded-lg"
+        className="bg-blue-600 text-white px-3 py-1 rounded"
         onClick={addCategory}
       >
         + Add Skill Category
@@ -150,7 +150,7 @@ function SortableCategory({
     <div
       ref={setNodeRef}
       style={style}
-      className="mb-4 border p-3 rounded-lg bg-white shadow-sm"
+      className="mb-4 border p-3 rounded bg-white shadow-sm"
     >
       {/* Drag Handle */}
       <div className="flex items-center mb-2">
@@ -168,7 +168,7 @@ function SortableCategory({
           value={category.title}
           onChange={(e) => handleCategoryTitleChange(catIdx, e.target.value)}
           placeholder="Category Title (e.g. Finance skills)"
-          className="flex-1 border rounded-lg p-2 font-semibold"
+          className="flex-1 border rounded p-2 font-semibold"
         />
       </div>
 
@@ -182,7 +182,7 @@ function SortableCategory({
                 handleSkillChange(catIdx, skillIdx, e.target.value)
               }
               placeholder={`Skill ${skillIdx + 1}`}
-              className="flex-1 border rounded-lg p-2"
+              className="flex-1 border rounded p-2"
             />
             {skillIdx !== 0 && (
               <button
@@ -201,7 +201,7 @@ function SortableCategory({
       <div className="flex gap-3">
         <button
           type="button"
-          className="mt-3 text-green-600 text-sm rounded-lg border px-2 py-1 bg-white hover:bg-green-600 hover:text-white transition-colors duration-300"
+          className="mt-3 text-green-600 text-sm rounded border px-2 py-1 bg-white hover:bg-green-600 hover:text-white transition-colors duration-300"
           onClick={() => addSkill(catIdx)}
         >
           + Add Skill
@@ -211,7 +211,7 @@ function SortableCategory({
         {catIdx !== 0 && (
           <button
             type="button"
-            className="mt-3 text-red-600 text-sm rounded-lg border px-2 py-1 bg-white hover:bg-red-600 hover:text-white transition-colors duration-300"
+            className="mt-3 text-red-600 text-sm rounded border px-2 py-1 bg-white hover:bg-red-600 hover:text-white transition-colors duration-300"
             onClick={() => removeCategory(catIdx)}
           >
             Remove Category

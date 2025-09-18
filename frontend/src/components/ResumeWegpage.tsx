@@ -38,7 +38,7 @@ function Page({
   totalPages: number;
 }) {
   return (
-    <main className="relative m-4 h-[297mm] w-[210mm] overflow-hidden rounded-md bg-white p-10 shadow-lg print:m-0 print:rounded-none print:shadow-none">
+    <main className="relative m-4 h-[297mm] w-[210mm] overflow-hidden rounded bg-white p-10 shadow-lg print:m-0 print:rounded-none print:shadow-none">
       {children}
       <div className="absolute bottom-4 left-0 right-0 text-center text-gray-400 text-sm print:block hidden">
         Page {pageNum} of {totalPages}

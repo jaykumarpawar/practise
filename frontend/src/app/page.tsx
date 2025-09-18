@@ -63,13 +63,13 @@ export default function Home() {
                   <td className="px-6 py-4">
                     <Link
                       href={`edit/${user.id}`}
-                      className="mt-2 text-blue-600 text-sm rounded-lg border py-1 px-2 bg-white hover:bg-blue-600 hover:text-white transition-colors duration-300"
+                      className="mt-2 text-blue-600 text-sm rounded border py-1 px-2 bg-white hover:bg-blue-600 hover:text-white transition-colors duration-300"
                     >
                       Edit
                     </Link>
                     <button
                       type="button"
-                      className="mt-2 ml-2 text-red-600 text-sm rounded-lg border py-1 px-2 bg-white hover:bg-red-600 hover:text-white transition-colors duration-300"
+                      className="mt-2 ml-2 text-red-600 text-sm rounded border py-1 px-2 bg-white hover:bg-red-600 hover:text-white transition-colors duration-300"
                     >
                       Delete
                     </button>

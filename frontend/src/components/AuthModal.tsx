@@ -38,7 +38,7 @@ export default function AuthModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-xl p-6 shadow-lg w-full max-w-sm">
+      <div className="bg-white rounded p-6 shadow-lg w-full max-w-sm">
         <h2 className="text-xl font-bold mb-4">Authenticate to Print</h2>
         <form className="space-y-4" onSubmit={handleSubmit}>
           {/* Username Input */}
