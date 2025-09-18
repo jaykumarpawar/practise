@@ -1,18 +1,24 @@
 "use client";
 
 import { useRouter, useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, ChangeEvent, FormEvent } from "react";
+
+interface FormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+}
 
 export default function EditPage() {
-  const { userId } = useParams();
+  const { userId } = useParams() as { userId?: string };
   const router = useRouter();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     firstName: "",
     lastName: "",
     email: "",
   });
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!userId) return;
@@ -34,22 +40,24 @@ export default function EditPage() {
           email: res.email || "",
         });
       })
-      .catch((e) => {
+      .catch((e: Error) => {
         console.error(e);
         setError(e.message);
       })
       .finally(() => setLoading(false));
   }, [userId]);
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!userId) return;
+
     setLoading(true);
 
     fetch(`https://dummyjson.com/users/${userId}`, {
@@ -64,7 +72,7 @@ export default function EditPage() {
         return res.json();
       })
       .then(() => router.push("/"))
-      .catch((err) => setError(err.message))
+      .catch((err: Error) => setError(err.message))
       .finally(() => setLoading(false));
   };
 

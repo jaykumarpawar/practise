@@ -1,24 +1,26 @@
 "use client";
-
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+interface User {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+
 export default function Home() {
-  const [users, setUsers] = useState([]);
-  const [limit, setLimit] = useState(10);
-  const [offset, setOffset] = useState(0);
+  const [users, setUsers] = useState<User[]>([]);
+  const [limit, setLimit] = useState<number>(10);
+  const [offset, setOffset] = useState<number>(0);
+
   useEffect(() => {
     fetch(`https://dummyjson.com/users?limit=${limit}&skip=${offset}`)
       .then((res) => res.json())
-      .then((res) => setUsers(res?.users));
-    // .catch((e) => console.log(e));
-    // console.log({ users });
-  }, []);
+      .then((res) => setUsers(res?.users || []))
+      .catch((e) => console.log(e));
+  }, [limit, offset]);
 
-  useEffect(() => {
-    console.log({ users });
-  }, [users]);
   return (
     <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
@@ -47,20 +49,20 @@ export default function Home() {
               {users?.map((user) => (
                 <tr
                   className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200"
-                  key={user?.id}
+                  key={user.id}
                 >
                   <th
                     scope="row"
                     className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                   >
-                    {user?.id}
+                    {user.id}
                   </th>
-                  <td className="px-6 py-4">{user?.firstName}</td>
-                  <td className="px-6 py-4">{user?.lastName}</td>
-                  <td className="px-6 py-4">{user?.email}</td>
+                  <td className="px-6 py-4">{user.firstName}</td>
+                  <td className="px-6 py-4">{user.lastName}</td>
+                  <td className="px-6 py-4">{user.email}</td>
                   <td className="px-6 py-4">
                     <Link
-                      href={`edit/${user?.id}`}
+                      href={`edit/${user.id}`}
                       className="mt-2 text-blue-600 text-sm rounded-lg border py-1 px-2 bg-white hover:bg-blue-600 hover:text-white transition-colors duration-300"
                     >
                       Edit
