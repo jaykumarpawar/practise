@@ -28,6 +28,8 @@ jobs:
         run: NODE_ENV=production npm run build
         env:
           NEXT_PUBLIC_BASE_PATH: ${{ github.event.repository.name }}
+          NEXT_PUBLIC_AUTH0_DOMAIN: ${{ secrets.NEXT_PUBLIC_AUTH0_DOMAIN }}
+          NEXT_PUBLIC_AUTH0_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_AUTH0_CLIENT_ID }}
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
