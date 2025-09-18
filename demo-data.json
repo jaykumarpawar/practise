@@ -15,6 +15,18 @@
       "degree": "Master of Software Engineering",
       "date": "Aug 2022",
       "details": "Specialized in AI & Machine Learning"
+    },
+    {
+      "school": "Massachusetts Institute of Technology (MIT)",
+      "degree": "Certification in Data Science",
+      "date": "Dec 2023",
+      "details": "Completed an intensive 6-month program focusing on machine learning and big data analytics."
+    },
+    {
+      "school": "University of California, Berkeley",
+      "degree": "Bachelor of Mathematics",
+      "date": "May 2018",
+      "details": "Minor in Statistics, Dean's List 2016-2018"
     }
   ],
   "experiences": [
@@ -40,6 +52,42 @@
         "Developed scalable microservices for search ranking",
         "Improved system availability from 95% to 99.9%",
         "Mentored junior developers and conducted code reviews"
+      ]
+    },
+    {
+      "org": "Facebook",
+      "role": "Software Engineer",
+      "startDate": "2015-09",
+      "endDate": "2017-12",
+      "current": false,
+      "bullets": [
+        "Designed and implemented a real-time messaging platform serving millions of users",
+        "Reduced message delivery latency by 25% through backend optimizations",
+        "Collaborated with product and design teams to improve user engagement metrics"
+      ]
+    },
+    {
+      "org": "Amazon",
+      "role": "Junior Software Developer",
+      "startDate": "2013-06",
+      "endDate": "2015-08",
+      "current": false,
+      "bullets": [
+        "Developed automated testing frameworks that decreased release bugs by 40%",
+        "Improved deployment pipeline efficiency, reducing downtime by 15%",
+        "Implemented monitoring tools that increased system reliability"
+      ]
+    },
+    {
+      "org": "Microsoft",
+      "role": "Intern Software Engineer",
+      "startDate": "2012-05",
+      "endDate": "2013-05",
+      "current": false,
+      "bullets": [
+        "Contributed to development of new features in Office suite",
+        "Assisted in debugging and fixing critical performance bottlenecks",
+        "Collaborated with cross-functional teams to deliver software updates on time"
       ]
     }
   ],
