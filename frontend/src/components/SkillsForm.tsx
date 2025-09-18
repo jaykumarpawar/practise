@@ -110,7 +110,7 @@ export default function SkillsForm({ skills, setSkills }: SkillsSectionProps) {
       {/* Add Category Button */}
       <button
         type="button"
-        className="bg-blue-600 text-white px-3 py-1 rounded-lg mt-4"
+        className="bg-blue-600 text-white px-3 py-1 rounded-lg"
         onClick={addCategory}
       >
         + Add Skill Category
