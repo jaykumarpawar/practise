@@ -172,7 +172,6 @@ export default function ResumeWegpage({ data }: { data: any }) {
 
     children.forEach((child, idx) => {
       const childHeight = (child as HTMLElement).offsetHeight;
-      console.log({ childHeight, currentHeight });
       if (
         currentHeight + childHeight > availableHeight &&
         currentPage.length > 0
@@ -187,7 +186,6 @@ export default function ResumeWegpage({ data }: { data: any }) {
     });
 
     if (currentPage.length > 0) newPages.push(currentPage);
-    console.log({ pageHeightPx, children });
     setPages(newPages);
   }, [blocks]);
 

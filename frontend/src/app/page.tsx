@@ -18,7 +18,7 @@ export default function Home() {
     fetch(`https://dummyjson.com/users?limit=${limit}&skip=${offset}`)
       .then((res) => res.json())
       .then((res) => setUsers(res?.users || []))
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }, [limit, offset]);
 
   return (

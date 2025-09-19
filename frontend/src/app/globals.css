@@ -52,12 +52,12 @@ body {
     visibility: hidden;
   }
 
-  #resume-print-area,
-  #resume-print-area * {
+  #resume-print-container,
+  #resume-print-container * {
     visibility: visible;
   }
 
-  #resume-print-area {
+  #resume-print-container {
     position: absolute;
     left: 0;
     top: 0;

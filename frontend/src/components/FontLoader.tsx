@@ -30,7 +30,6 @@ export default function FontLoader() {
       }
     `;
     document.head.appendChild(style);
-    console.log({ style });
   }, []);
   return <React.Fragment />;
 }

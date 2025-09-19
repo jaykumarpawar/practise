@@ -1,16 +1,14 @@
 "use client";
-import React, { useEffect, useRef, useState, useTransition, memo } from "react";
-import dynamic from "next/dynamic";
-import ResumeDocument from "@/components/ResumeDocument";
+import React, { useEffect, useState, useTransition } from "react";
 import { useDebounce } from "../hooks/useDebounce";
 import EducationForm from "@/components/EducationForm";
 import ExperienceForm from "@/components/ExperienceForm";
 import SkillsForm, { SkillCategory } from "@/components/SkillsForm";
 import { getAssetUrl } from "@/utils/urlUtility";
-import useDisableContextMenu from "../hooks/useDisableContextMenu";
 import ResumeWegpage from "@/components/ResumeWegpage";
-import AuthModal from "@/components/AuthModal";
-import { useAuth0 } from "@auth0/auth0-react";
+import { getUser, logout } from "@/utils/auth";
+import PrintAuthModal from "@/components/PrintAuthModal";
+import SecurePrintable from "@/components/SecurePrintable";
 
 const formStructure = {
   name: "",
@@ -31,69 +29,64 @@ const formStructure = {
   skills: [{ title: "Technical skills", items: [""] }],
 };
 
-const PDFViewer = dynamic(
-  () => import("@react-pdf/renderer").then((mod) => mod.PDFViewer),
-  { ssr: false }
-);
-
-const MemoizedResumeDocument = memo(ResumeDocument);
-
 export default function ResumeBuilder() {
   // useDisableContextMenu();
-  const count = useRef(0);
   const [formData, setFormData] = useState(formStructure);
   const [isPending, startTransition] = useTransition();
+  const [loading, setLoading] = useState(false);
 
   const debouncedFormData = useDebounce(formData, 500);
   const [deferredData, setDeferredData] = useState(debouncedFormData);
 
-  const [showAuthModal, setShowAuthModal] = useState(false);
-  const [authenticated, setAuthenticated] = useState(false);
+  const [isPrintModalOpen, setIsPrintModalOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
 
-  // Load persisted auth
   useEffect(() => {
-    const saved = localStorage.getItem("resumeAuth");
-    if (saved) setAuthenticated(true);
+    getUser().then((u) => {
+      if (u) setUser(u);
+    });
   }, []);
 
-  const handleAuthSuccess = () => {
-    setAuthenticated(true);
-    setShowAuthModal(false);
-    setTimeout(() => window.print(), 200); // ✅ allow print after auth
-  };
-
-  const handlePrintClick = () => {
-    if (authenticated) {
-      window.print();
-    } else {
-      setShowAuthModal(true);
-    }
-  };
-
-  const { loginWithRedirect, isAuthenticated, user, logout } = useAuth0();
-
   const handlePrint = async () => {
-    if (!isAuthenticated) {
-      await loginWithRedirect({
-        appState: { returnTo: window.location.pathname },
-      });
+    if (!user) {
+      setIsPrintModalOpen(true);
     } else {
       window.print();
     }
   };
 
-  // Optional: Block Ctrl+P until authenticated
   useEffect(() => {
     const blockPrint = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key === "p") {
         e.preventDefault();
-        if (!isAuthenticated) loginWithRedirect();
-        else window.print();
+        if (!user) {
+          setIsPrintModalOpen(true);
+        } else {
+          window.print();
+        }
       }
     };
     window.addEventListener("keydown", blockPrint);
     return () => window.removeEventListener("keydown", blockPrint);
-  }, [isAuthenticated]);
+  }, [user]);
+
+  async function handleLoadDemoData() {
+    if (!window.confirm("Load demo data? Current form data will be lost."))
+      return;
+
+    try {
+      setLoading(true);
+      const res = await fetch(getAssetUrl("/demo-data.json"));
+      const demoData = await res.json();
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      setFormData(demoData);
+    } catch (error) {
+      console.error("Failed to load demo data:", error);
+      alert("Something went wrong while loading demo data.");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
     startTransition(() => {
@@ -101,14 +94,22 @@ export default function ResumeBuilder() {
     });
   }, [debouncedFormData]);
 
-  useEffect(() => {
-    count.current++;
-  }, [deferredData]);
-
   return (
     <div className="flex h-screen">
       <div className="w-1/2 p-6 pb-25 overflow-y-auto bg-gray-50">
         <h2 className="text-2xl font-bold mb-6">Resume Form</h2>
+        {user && (
+          <div className="mb-4 p-3 bg-blue-100 border border-blue-300 rounded">
+            <p className="font-semibold">Welcome, {user.name || user.email}</p>
+            <p className="text-sm text-gray-600">{user.email}</p>
+            <button
+              className="text-sm text-red-600 underline mt-1"
+              onClick={() => logout()}
+            >
+              Log out
+            </button>
+          </div>
+        )}
         <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
           <div>
             <h3 className="font-semibold text-lg mb-2">Header</h3>
@@ -147,20 +148,20 @@ export default function ResumeBuilder() {
         <div className="fixed bottom-0 left-0 w-1/2 bg-white border-t p-4 flex justify-around">
           <button
             type="button"
-            className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition"
-            onClick={async () => {
-              if (
-                !window.confirm(
-                  "Load demo data? Current form data will be lost."
-                )
-              )
-                return;
-              const res = await fetch(getAssetUrl("/demo-data.json"));
-              const demoData = await res.json();
-              setFormData(demoData);
-            }}
+            className={`bg-purple-600 text-white px-4 py-2 rounded transition flex items-center justify-center gap-2 ${
+              loading ? "opacity-70 cursor-not-allowed" : "hover:bg-purple-700"
+            }`}
+            onClick={handleLoadDemoData}
+            disabled={loading}
           >
-            Load Demo Data
+            {loading ? (
+              <>
+                <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" />
+                Loading...
+              </>
+            ) : (
+              "Load Demo Data"
+            )}
           </button>
           <button
             type="button"
@@ -178,42 +179,27 @@ export default function ResumeBuilder() {
 
       <div className="w-1/2 p-6 pb-16 bg-white overflow-y-auto border-l">
         <h2 className="text-2xl font-bold mb-4">Preview</h2>
-        {isPending && (
+        {isPending ? (
           <p className="text-sm text-gray-500 mb-2">Updating preview...</p>
+        ) : (
+          <SecurePrintable isAuthenticated={!!user}>
+            <ResumeWegpage data={deferredData} />
+          </SecurePrintable>
         )}
-        {/* <PDFViewer
-          className="w-full h-[90%] border rounded"
-          key={Date.now()}
-          showToolbar={false}
-        >
-          <MemoizedResumeDocument data={deferredData} />
-        </PDFViewer> */}
-        <div
-          id="resume-print-area"
-          className="grid bg-gray-200 print:block print:min-h-0"
-        >
-          <ResumeWegpage data={deferredData} />
-        </div>
         <div className="fixed bottom-0 right-0 w-1/2 bg-white border-t p-4 flex justify-around">
-          {/* Print button (beside reset button) */}
           <button
             onClick={handlePrint}
-            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+            className="px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700"
           >
             Print
           </button>
-          {isAuthenticated && (
-            <button
-              onClick={() =>
-                logout({ logoutParams: { returnTo: window.location.origin } })
-              }
-              className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
-            >
-              Logout
-            </button>
-          )}
         </div>
       </div>
+      <PrintAuthModal
+        open={isPrintModalOpen}
+        onClose={() => setIsPrintModalOpen(false)}
+        onAuthSuccess={(u) => setUser(u)}
+      />
     </div>
   );
 }
