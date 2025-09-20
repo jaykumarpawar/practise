@@ -15,11 +15,15 @@ const formStructure = {
   address: "",
   email: "",
   phone: "",
-  education: [{ school: "", degree: "", date: "", details: "" }],
+  education: [
+    { school: "", degree: "", date: "", city: "", state: "", details: "" },
+  ],
   experiences: [
     {
       org: "",
       role: "",
+      city: "",
+      state: "",
       startDate: "",
       endDate: "",
       current: false,
@@ -96,7 +100,7 @@ export default function ResumeBuilder() {
 
   return (
     <div className="flex h-screen">
-      <div className="w-1/2 p-6 pb-25 overflow-y-auto bg-gray-50">
+      <div className="w-1/2 p-6 pb-25 overflow-y-auto bg-gray-50 border-r">
         <h2 className="text-2xl font-bold mb-6">Resume Form</h2>
         {user && (
           <div className="mb-4 p-3 bg-blue-100 border border-blue-300 rounded">
@@ -110,7 +114,7 @@ export default function ResumeBuilder() {
             </button>
           </div>
         )}
-        <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+        <form className="space-y-2" onSubmit={(e) => e.preventDefault()}>
           <div>
             <h3 className="font-semibold text-lg mb-2">Header</h3>
             {["name", "address", "email", "phone"].map((field) => (
@@ -145,7 +149,7 @@ export default function ResumeBuilder() {
             }
           />
         </form>
-        <div className="fixed bottom-0 left-0 w-1/2 bg-white border-t p-4 flex justify-around">
+        <div className="fixed bottom-0 left-0 w-1/2 bg-white border p-4 flex justify-around">
           <button
             type="button"
             className={`bg-purple-600 text-white px-4 py-2 rounded transition flex items-center justify-center gap-2 ${
@@ -186,7 +190,7 @@ export default function ResumeBuilder() {
             <ResumeWegpage data={deferredData} />
           </SecurePrintable>
         )}
-        <div className="fixed bottom-0 right-0 w-1/2 bg-white border-t p-4 flex justify-around">
+        <div className="fixed bottom-0 right-0 w-1/2 bg-white border p-4 flex justify-around">
           <button
             onClick={handlePrint}
             className="px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700"

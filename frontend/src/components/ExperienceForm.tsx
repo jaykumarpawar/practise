@@ -4,6 +4,8 @@ import React from "react";
 interface Experience {
   org: string;
   role: string;
+  city: string;
+  state: string;
   startDate: string;
   endDate: string;
   current: boolean;
@@ -16,32 +18,56 @@ interface Props {
 }
 
 export default function ExperienceForm({ experiences, setExperiences }: Props) {
-  const handleChange = (idx: number, field: keyof Experience, value: any) => {
+  const handleChange = <K extends keyof Experience>(
+    idx: number,
+    field: K,
+    value: Experience[K]
+  ) => {
     const updated = [...experiences];
-    (updated[idx] as any)[field] = value;
+    updated[idx][field] = value;
     setExperiences(updated);
   };
 
   return (
     <div>
       <h3 className="font-semibold text-lg mb-2">Experience</h3>
+
       {experiences.map((exp, idx) => (
-        <div key={idx} className="mb-4 border p-3 rounded bg-white">
+        <div key={idx} className="mb-4 border p-4 rounded bg-white space-y-3">
+          {/* Organization */}
           <input
             value={exp.org}
             onChange={(e) => handleChange(idx, "org", e.target.value)}
             placeholder="Organization"
-            className="w-full border rounded p-2 mb-2"
+            className="w-full border rounded p-2"
           />
+
+          {/* Role / Position */}
           <input
             value={exp.role}
             onChange={(e) => handleChange(idx, "role", e.target.value)}
             placeholder="Role / Position"
-            className="w-full border rounded p-2 mb-2"
+            className="w-full border rounded p-2"
           />
 
+          {/* City + State */}
+          <div className="grid grid-cols-2 gap-3">
+            <input
+              value={exp.city}
+              onChange={(e) => handleChange(idx, "city", e.target.value)}
+              placeholder="City"
+              className="w-full border rounded p-2"
+            />
+            <input
+              value={exp.state}
+              onChange={(e) => handleChange(idx, "state", e.target.value)}
+              placeholder="State"
+              className="w-full border rounded p-2"
+            />
+          </div>
+
           {/* Start + End Dates */}
-          <div className="flex gap-2 mb-2">
+          <div className="flex gap-2">
             <input
               type="month"
               value={exp.startDate}
@@ -58,7 +84,7 @@ export default function ExperienceForm({ experiences, setExperiences }: Props) {
           </div>
 
           {/* Checkbox for "I currently work here" */}
-          <label className="flex items-center gap-2 mb-2">
+          <label className="flex items-center gap-2">
             <input
               type="checkbox"
               checked={exp.current}
@@ -67,6 +93,7 @@ export default function ExperienceForm({ experiences, setExperiences }: Props) {
             I currently work here
           </label>
 
+          {/* Bullets */}
           <textarea
             value={exp.bullets.join("\n")}
             onChange={(e) =>
@@ -77,6 +104,7 @@ export default function ExperienceForm({ experiences, setExperiences }: Props) {
             rows={4}
           />
 
+          {/* Remove Button */}
           {idx !== 0 && (
             <button
               type="button"
@@ -90,15 +118,19 @@ export default function ExperienceForm({ experiences, setExperiences }: Props) {
           )}
         </div>
       ))}
+
+      {/* Add Experience Button */}
       <button
         type="button"
-        className="bg-blue-600 text-white px-3 py-1 rounded"
+        className="bg-blue-600 text-white px-3 py-1 rounded mt-3"
         onClick={() =>
           setExperiences([
             ...experiences,
             {
               org: "",
               role: "",
+              city: "",
+              state: "",
               startDate: "",
               endDate: "",
               current: false,

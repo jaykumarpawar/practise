@@ -84,13 +84,20 @@ export default function ResumeWegpage({ data }: { data: any }) {
     data.education?.forEach((edu: any, idx: number) => {
       newBlocks.push(
         <div key={`edu-${idx}`} className="mb-3">
-          <div className="flex justify-between items-start">
-            <span className="font-semibold">
-              {edu.school || "University Name"}
-            </span>
-            <span className="text-sm">{edu.date || "Graduation Date"}</span>
+          <div className="leading-none">
+            <div className="flex justify-between items-start">
+              <span className="font-semibold">
+                {edu.school || "University Name"}
+              </span>
+              <span className="text-sm">
+                {edu.city}, {edu.state}
+              </span>
+            </div>
+            <div className="flex justify-between items-start">
+              <span className="text-sm">{edu.degree || "Degree, Major"}</span>
+              <span className="text-sm">{edu.date || "Graduation Date"}</span>
+            </div>
           </div>
-          <div className="text-sm">{edu.degree || "Degree, Major"}</div>
           {edu.details && (
             <div className="text-sm text-gray-600">{edu.details}</div>
           )}
@@ -110,16 +117,24 @@ export default function ResumeWegpage({ data }: { data: any }) {
     data.experiences?.forEach((exp: any, idx: number) => {
       newBlocks.push(
         <div key={`exp-${idx}`} className="mb-3">
-          <div className="flex justify-between items-start">
-            <span className="font-semibold">{exp.org || "Organization"}</span>
-            <span className="text-sm">
-              {formatDateRange(exp.startDate, exp.endDate, exp.current) ||
-                "Month Year – Month Year"}
-            </span>
+          <div className="leading-none">
+            <div className="flex justify-between items-start">
+              <span className="font-semibold">{exp.org || "Organization"}</span>
+              <span className="text-sm">
+                {formatDateRange(exp.startDate, exp.endDate, exp.current) ||
+                  "Month Year – Month Year"}
+              </span>
+            </div>
+            <div className="flex justify-between items-start">
+              <span className="font-semibold">
+                {exp.role || "Position Title"}
+              </span>
+              <span className="text-sm">
+                {exp.city}, {exp.state}
+              </span>
+            </div>
           </div>
-          <div className="italic text-sm mb-1">
-            {exp.role || "Position Title"}
-          </div>
+
           <ul className="list-disc ml-6 text-sm space-y-1">
             {(exp.bullets?.length
               ? exp.bullets

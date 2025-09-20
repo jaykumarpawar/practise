@@ -80,8 +80,7 @@ export default function SkillsForm({ skills, setSkills }: SkillsSectionProps) {
 
   return (
     <div>
-      <h3 className="text-lg font-semibold mb-2">Skills & Interests</h3>
-
+      <h3 className="text-lg font-semibold mb-2">Skills</h3>
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
