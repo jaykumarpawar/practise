@@ -33,17 +33,24 @@ const formStructure = {
   skills: [{ title: "Technical skills", items: [""] }],
 };
 
+const defaultSettings = {
+  fontFamily: "Calibri",
+  fontSize: 11,
+  headerFontSize: 14,
+  showPageNumbers: true,
+};
+
 export default function ResumeBuilder() {
   // useDisableContextMenu();
   const [formData, setFormData] = useState(formStructure);
-  const [isPending, startTransition] = useTransition();
   const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const [settings, setSettings] = useState(defaultSettings);
+  const [isPrintModalOpen, setIsPrintModalOpen] = useState(false);
 
+  const [isPending, startTransition] = useTransition();
   const debouncedFormData = useDebounce(formData, 500);
   const [deferredData, setDeferredData] = useState(debouncedFormData);
-
-  const [isPrintModalOpen, setIsPrintModalOpen] = useState(false);
-  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     getUser().then((u) => {
@@ -100,103 +107,180 @@ export default function ResumeBuilder() {
 
   return (
     <div className="flex h-screen">
-      <div className="w-1/2 p-6 pb-25 overflow-y-auto bg-gray-50 border-r">
-        <h2 className="text-2xl font-bold mb-6">Resume Form</h2>
-        {user && (
-          <div className="mb-4 p-3 bg-blue-100 border border-blue-300 rounded">
-            <p className="font-semibold">Welcome, {user.name || user.email}</p>
-            <p className="text-sm text-gray-600">{user.email}</p>
+      <div className="grid grid-cols-[40%_14%_46%] w-full">
+        <div className="p-6 pb-25 overflow-y-auto bg-gray-50 border-r">
+          <h2 className="text-2xl font-bold mb-6">Resume Form</h2>
+          {user && (
+            <div className="mb-4 p-3 bg-blue-100 border border-blue-300 rounded">
+              <p className="font-semibold">
+                Welcome, {user.name || user.email}
+              </p>
+              <p className="text-sm text-gray-600">{user.email}</p>
+              <button
+                className="text-sm text-red-600 underline mt-1"
+                onClick={() => logout()}
+              >
+                Log out
+              </button>
+            </div>
+          )}
+          <form className="space-y-2" onSubmit={(e) => e.preventDefault()}>
+            <div>
+              <h3 className="font-semibold text-lg mb-2">Header</h3>
+              {["name", "address", "email", "phone"].map((field) => (
+                <input
+                  key={field}
+                  name={field}
+                  value={(formData as any)[field]}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      [field]: e.target.value,
+                    }))
+                  }
+                  placeholder={field[0].toUpperCase() + field.slice(1)}
+                  className="w-full border rounded p-2 mb-2"
+                />
+              ))}
+            </div>
+            <EducationForm
+              education={formData.education}
+              setEducation={(education) =>
+                setFormData((prev) => ({ ...prev, education }))
+              }
+            />
+            <ExperienceForm
+              experiences={formData.experiences}
+              setExperiences={(experiences) =>
+                setFormData((prev) => ({ ...prev, experiences }))
+              }
+            />
+            <SkillsForm
+              skills={formData.skills}
+              setSkills={(skills: SkillCategory[]) =>
+                setFormData((prev) => ({ ...prev, skills }))
+              }
+            />
+          </form>
+          <div className="fixed bottom-0 left-0 w-[40%] bg-white border p-4 flex justify-around">
             <button
-              className="text-sm text-red-600 underline mt-1"
-              onClick={() => logout()}
+              type="button"
+              className={`bg-purple-600 text-white px-4 py-2 rounded transition flex items-center justify-center gap-2 ${
+                loading
+                  ? "opacity-70 cursor-not-allowed"
+                  : "hover:bg-purple-700"
+              }`}
+              onClick={handleLoadDemoData}
+              disabled={loading}
             >
-              Log out
+              {loading ? (
+                <>
+                  <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" />
+                  Loading...
+                </>
+              ) : (
+                "Load Demo Data"
+              )}
+            </button>
+            <button
+              type="button"
+              className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition"
+              onClick={() => {
+                if (!window.confirm("Reset form? Current data will be lost."))
+                  return;
+                setFormData(formStructure);
+              }}
+            >
+              Reset
             </button>
           </div>
-        )}
-        <form className="space-y-2" onSubmit={(e) => e.preventDefault()}>
-          <div>
-            <h3 className="font-semibold text-lg mb-2">Header</h3>
-            {["name", "address", "email", "phone"].map((field) => (
-              <input
-                key={field}
-                name={field}
-                value={(formData as any)[field]}
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, [field]: e.target.value }))
-                }
-                placeholder={field[0].toUpperCase() + field.slice(1)}
-                className="w-full border rounded p-2 mb-2"
-              />
-            ))}
-          </div>
-          <EducationForm
-            education={formData.education}
-            setEducation={(education) =>
-              setFormData((prev) => ({ ...prev, education }))
-            }
-          />
-          <ExperienceForm
-            experiences={formData.experiences}
-            setExperiences={(experiences) =>
-              setFormData((prev) => ({ ...prev, experiences }))
-            }
-          />
-          <SkillsForm
-            skills={formData.skills}
-            setSkills={(skills: SkillCategory[]) =>
-              setFormData((prev) => ({ ...prev, skills }))
-            }
-          />
-        </form>
-        <div className="fixed bottom-0 left-0 w-1/2 bg-white border p-4 flex justify-around">
-          <button
-            type="button"
-            className={`bg-purple-600 text-white px-4 py-2 rounded transition flex items-center justify-center gap-2 ${
-              loading ? "opacity-70 cursor-not-allowed" : "hover:bg-purple-700"
-            }`}
-            onClick={handleLoadDemoData}
-            disabled={loading}
-          >
-            {loading ? (
-              <>
-                <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" />
-                Loading...
-              </>
-            ) : (
-              "Load Demo Data"
-            )}
-          </button>
-          <button
-            type="button"
-            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition"
-            onClick={() => {
-              if (!window.confirm("Reset form? Current data will be lost."))
-                return;
-              setFormData(formStructure);
-            }}
-          >
-            Reset
-          </button>
         </div>
-      </div>
+        <div className="p-6 pb-25 overflow-y-auto">
+          <h2 className="text-2xl font-bold pb-6">Settings</h2>
+          {/* Font Family */}
+          <div className="mb-3">
+            <h3 className="font-semibold text-lg mb-2">Font Family</h3>
+            <select
+              className="border rounded p-2 w-full mb-2"
+              value={settings.fontFamily}
+              onChange={(e) =>
+                setSettings((prev) => ({ ...prev, fontFamily: e.target.value }))
+              }
+            >
+              <option value="Calibri">Calibri</option>
+              <option value="Arial">Arial</option>
+              <option value="Times New Roman">Times New Roman</option>
+            </select>
+          </div>
 
-      <div className="w-1/2 p-6 pb-16 bg-white overflow-y-auto border-l">
-        <h2 className="text-2xl font-bold mb-4">Preview</h2>
-        {isPending ? (
-          <p className="text-sm text-gray-500 mb-2">Updating preview...</p>
-        ) : (
-          <SecurePrintable isAuthenticated={!!user}>
-            <ResumeWegpage data={deferredData} />
-          </SecurePrintable>
-        )}
-        <div className="fixed bottom-0 right-0 w-1/2 bg-white border p-4 flex justify-around">
-          <button
-            onClick={handlePrint}
-            className="px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700"
-          >
-            Print
-          </button>
+          {/* Font Size */}
+          <div className="mb-3">
+            <h3 className="font-semibold text-lg mb-2">Body Font Size</h3>
+            <input
+              type="number"
+              min={9}
+              max={16}
+              value={settings.fontSize}
+              onChange={(e) =>
+                setSettings((prev) => ({
+                  ...prev,
+                  fontSize: Number(e.target.value),
+                }))
+              }
+              className="border rounded p-2 w-full mb-2"
+            />
+          </div>
+
+          {/* Header Font Size */}
+          <div className="mb-3">
+            <h3 className="font-semibold text-lg mb-2">Header Font Size</h3>
+            <input
+              type="number"
+              min={12}
+              max={24}
+              value={settings.headerFontSize}
+              onChange={(e) =>
+                setSettings((prev) => ({
+                  ...prev,
+                  headerFontSize: Number(e.target.value),
+                }))
+              }
+              className="border rounded p-2 w-full mb-2"
+            />
+          </div>
+
+          {/* Show/Hide Page Numbers */}
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={settings.showPageNumbers}
+              onChange={(e) =>
+                setSettings((prev) => ({
+                  ...prev,
+                  showPageNumbers: e.target.checked,
+                }))
+              }
+            />
+            Show Page Numbers
+          </label>
+        </div>
+        <div className="p-0 pb-16 bg-white overflow-y-auto border-l">
+          <h2 className="text-2xl font-bold p-6">Preview</h2>
+          {isPending ? (
+            <p className="text-sm text-gray-500 mb-2">Updating preview...</p>
+          ) : (
+            <SecurePrintable isAuthenticated={!!user}>
+              <ResumeWegpage data={deferredData} />
+            </SecurePrintable>
+          )}
+          <div className="fixed bottom-0 right-0 w-[46%] bg-white border p-4 flex justify-around">
+            <button
+              onClick={handlePrint}
+              className="px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700"
+            >
+              Print
+            </button>
+          </div>
         </div>
       </div>
       <PrintAuthModal
