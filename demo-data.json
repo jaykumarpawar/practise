@@ -8,24 +8,32 @@
       "school": "Harvard University",
       "degree": "Bachelor of Computer Science",
       "date": "May 2020",
+      "city": "Cambridge",
+      "state": "MA",
       "details": "Graduated with Honors, GPA: 3.9/4.0"
     },
     {
       "school": "Stanford University",
       "degree": "Master of Software Engineering",
       "date": "Aug 2022",
+      "city": "Stanford",
+      "state": "CA",
       "details": "Specialized in AI & Machine Learning"
     },
     {
       "school": "Massachusetts Institute of Technology (MIT)",
       "degree": "Certification in Data Science",
       "date": "Dec 2023",
+      "city": "Cambridge",
+      "state": "MA",
       "details": "Completed an intensive 6-month program focusing on machine learning and big data analytics."
     },
     {
       "school": "University of California, Berkeley",
       "degree": "Bachelor of Mathematics",
       "date": "May 2018",
+      "city": "Berkeley",
+      "state": "CA",
       "details": "Minor in Statistics, Dean's List 2016-2018"
     }
   ],
@@ -33,6 +41,8 @@
     {
       "org": "OpenAI",
       "role": "Senior Software Engineer",
+      "city": "San Francisco",
+      "state": "CA",
       "startDate": "2020-06",
       "endDate": "2023-08",
       "current": false,
@@ -45,6 +55,8 @@
     {
       "org": "Google",
       "role": "Software Engineer",
+      "city": "Mountain View",
+      "state": "CA",
       "startDate": "2018-01",
       "endDate": "2020-05",
       "current": false,
@@ -57,6 +69,8 @@
     {
       "org": "Facebook",
       "role": "Software Engineer",
+      "city": "Menlo Park",
+      "state": "CA",
       "startDate": "2015-09",
       "endDate": "2017-12",
       "current": false,
@@ -69,6 +83,8 @@
     {
       "org": "Amazon",
       "role": "Junior Software Developer",
+      "city": "Seattle",
+      "state": "WA",
       "startDate": "2013-06",
       "endDate": "2015-08",
       "current": false,
@@ -81,6 +97,8 @@
     {
       "org": "Microsoft",
       "role": "Intern Software Engineer",
+      "city": "Redmond",
+      "state": "WA",
       "startDate": "2012-05",
       "endDate": "2013-05",
       "current": false,
