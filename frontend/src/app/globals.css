@@ -64,7 +64,19 @@ body {
     width: 100%;
   }
 
-  /* Page settings */
+  /* Hide Form + Settings columns */
+  .print-hide {
+    display: none !important;
+  }
+
+  /* Make Preview column take full page */
+  .print-full {
+    width: 100% !important;
+    grid-column: 1 / -1 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
   @page {
     size: A4;
     margin: 0;

@@ -108,7 +108,7 @@ export default function ResumeBuilder() {
   return (
     <div className="flex h-screen">
       <div className="grid grid-cols-[40%_14%_46%] w-full">
-        <div className="p-6 pb-25 overflow-y-auto bg-gray-50 border-r">
+        <div className="p-6 pb-25 overflow-y-auto bg-gray-50 border-r print-hide">
           <h2 className="text-2xl font-bold mb-6">Resume Form</h2>
           {user && (
             <div className="mb-4 p-3 bg-blue-100 border border-blue-300 rounded">
@@ -195,7 +195,7 @@ export default function ResumeBuilder() {
             </button>
           </div>
         </div>
-        <div className="p-6 pb-25 overflow-y-auto">
+        <div className="p-6 pb-25 overflow-y-auto print-hide">
           <h2 className="text-2xl font-bold pb-6">Settings</h2>
           {/* Font Family */}
           <div className="mb-3">
@@ -219,7 +219,7 @@ export default function ResumeBuilder() {
             <input
               type="number"
               min={9}
-              max={16}
+              max={14}
               value={settings.fontSize}
               onChange={(e) =>
                 setSettings((prev) => ({
@@ -236,8 +236,8 @@ export default function ResumeBuilder() {
             <h3 className="font-semibold text-lg mb-2">Header Font Size</h3>
             <input
               type="number"
-              min={12}
-              max={24}
+              min={14}
+              max={18}
               value={settings.headerFontSize}
               onChange={(e) =>
                 setSettings((prev) => ({
@@ -265,7 +265,7 @@ export default function ResumeBuilder() {
           </label>
         </div>
         <div className="p-0 pb-16 bg-white overflow-y-auto border-l">
-          <h2 className="text-2xl font-bold p-6">Preview</h2>
+          <h2 className="text-2xl font-bold p-6 print:hidden">Preview</h2>
           {isPending ? (
             <p className="text-sm text-gray-500 mb-2">Updating preview...</p>
           ) : (
@@ -273,7 +273,7 @@ export default function ResumeBuilder() {
               <ResumeWegpage data={deferredData} settings={settings} />
             </SecurePrintable>
           )}
-          <div className="fixed bottom-0 right-0 w-[46%] bg-white border p-4 flex justify-around">
+          <div className="fixed bottom-0 right-0 w-[46%] bg-white border p-4 flex justify-around print-hide">
             <button
               onClick={handlePrint}
               className="px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700"

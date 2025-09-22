@@ -65,6 +65,35 @@ interface Settings {
   showPageNumbers: boolean;
 }
 
+const CalenderIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    className="size-4"
+  >
+    <path
+      fillRule="evenodd"
+      d="M4 1.75a.75.75 0 0 1 1.5 0V3h5V1.75a.75.75 0 0 1 1.5 0V3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2V1.75ZM4.5 6a1 1 0 0 0-1 1v4.5a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1h-7Z"
+      clipRule="evenodd"
+    />
+  </svg>
+);
+const LocationIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    className="size-4"
+  >
+    <path
+      fillRule="evenodd"
+      d="m7.539 14.841.003.003.002.002a.755.755 0 0 0 .912 0l.002-.002.003-.003.012-.009a5.57 5.57 0 0 0 .19-.153 15.588 15.588 0 0 0 2.046-2.082c1.101-1.362 2.291-3.342 2.291-5.597A5 5 0 0 0 3 7c0 2.255 1.19 4.235 2.292 5.597a15.591 15.591 0 0 0 2.046 2.082 8.916 8.916 0 0 0 .189.153l.012.01ZM8 8.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"
+      clipRule="evenodd"
+    />
+  </svg>
+);
+
 export default function ResumeWegpage({
   data,
   settings,
@@ -112,21 +141,25 @@ export default function ResumeWegpage({
     data.education?.forEach((edu: any, idx: number) => {
       newBlocks.push(
         <div key={`edu-${idx}`} className="mb-3">
-          <div className="leading-none">
+          <div className="leading-non">
             <div className="flex justify-between items-start">
               <span className="font-semibold">
                 {edu.school || "University Name"}
               </span>
-              <span>
-                {edu.city}, {edu.state}
+              <span className="flex items-center">
+                <LocationIcon />
+                {edu.city || "City"}, {edu.state || "State"}
               </span>
             </div>
             <div className="flex justify-between items-start">
               <span>{edu.degree || "Degree, Major"}</span>
-              <span>{edu.date || "Graduation Date"}</span>
+              <span className="flex items-center">
+                <CalenderIcon />
+                {edu.date || "Graduation Date"}
+              </span>
             </div>
           </div>
-          {edu.details && <div className="text-gray-600">{edu.details}</div>}
+          {edu.details && <span>{edu.details}</span>}
         </div>
       );
     });
@@ -144,10 +177,11 @@ export default function ResumeWegpage({
     data.experiences?.forEach((exp: any, idx: number) => {
       newBlocks.push(
         <div key={`exp-${idx}`} className="mb-3">
-          <div className="leading-none">
+          <div className="leading-non">
             <div className="flex justify-between items-start">
               <span className="font-semibold">{exp.org || "Organization"}</span>
-              <span>
+              <span className="flex items-center">
+                <CalenderIcon />
                 {formatDateRange(exp.startDate, exp.endDate, exp.current) ||
                   "Month Year – Month Year"}
               </span>
@@ -156,8 +190,9 @@ export default function ResumeWegpage({
               <span className="font-semibold">
                 {exp.role || "Position Title"}
               </span>
-              <span>
-                {exp.city}, {exp.state}
+              <span className="flex items-center">
+                <LocationIcon />
+                {exp.city || "City"}, {exp.state || "State"}
               </span>
             </div>
           </div>
@@ -230,7 +265,7 @@ export default function ResumeWegpage({
 
     if (currentPage.length > 0) newPages.push(currentPage);
     setPages(newPages);
-  }, [blocks]);
+  }, [blocks, settings]);
 
   return (
     <div className="grid min-h-screen place-items-center bg-gray-200 print:block print:min-h-0">

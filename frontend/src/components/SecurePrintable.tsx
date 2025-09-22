@@ -14,7 +14,7 @@ export default function SecurePrintable({
   return (
     <div
       id={isAuthenticated ? "resume-print-container" : "resume-container"}
-      className="relative"
+      className="relative print-full"
     >
       <div id="resume-print-area">{children}</div>
     </div>
