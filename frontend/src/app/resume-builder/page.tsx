@@ -270,7 +270,7 @@ export default function ResumeBuilder() {
             <p className="text-sm text-gray-500 mb-2">Updating preview...</p>
           ) : (
             <SecurePrintable isAuthenticated={!!user}>
-              <ResumeWegpage data={deferredData} />
+              <ResumeWegpage data={deferredData} settings={settings} />
             </SecurePrintable>
           )}
           <div className="fixed bottom-0 right-0 w-[46%] bg-white border p-4 flex justify-around">

@@ -32,22 +32,46 @@ function Page({
   children,
   pageNum,
   totalPages,
+  settings,
 }: {
   children: React.ReactNode[];
   pageNum: number;
   totalPages: number;
+  settings: Settings;
 }) {
   return (
-    <main className="relative m-4 h-[297mm] w-[210mm] overflow-hidden rounded bg-white p-10 shadow-lg print:m-0 print:rounded-none print:shadow-none">
+    <main
+      className="relative m-4 h-[297mm] w-[210mm] overflow-hidden rounded bg-white p-10 shadow-lg print:m-0 print:rounded-none print:shadow-none"
+      style={{
+        fontFamily: settings.fontFamily,
+        fontSize: `${settings.fontSize}pt`,
+      }}
+    >
       {children}
-      <div className="absolute bottom-4 left-0 right-0 text-center text-gray-400 text-sm print:block hidden">
-        Page {pageNum} of {totalPages}
-      </div>
+      {/* Page number (conditionally rendered) */}
+      {settings.showPageNumbers && (
+        <div className="absolute bottom-4 left-0 right-0 text-center text-gray-400 print:block hidden">
+          Page {pageNum} of {totalPages}
+        </div>
+      )}
     </main>
   );
 }
 
-export default function ResumeWegpage({ data }: { data: any }) {
+interface Settings {
+  fontFamily: string;
+  fontSize: number;
+  headerFontSize: number;
+  showPageNumbers: boolean;
+}
+
+export default function ResumeWegpage({
+  data,
+  settings,
+}: {
+  data: any;
+  settings: Settings;
+}) {
   const measureRef = useRef<HTMLDivElement>(null);
   const [pages, setPages] = useState<React.ReactNode[][]>([]);
   const [blocks, setBlocks] = useState<React.ReactNode[]>([]);
@@ -59,10 +83,13 @@ export default function ResumeWegpage({ data }: { data: any }) {
     // Header
     newBlocks.push(
       <div key="header" className="text-center mb-6">
-        <div className="text-2xl font-bold mb-2 border-b border-black pb-2">
+        <div
+          className="text-2xl font-bold mb-2 border-b border-black pb-2"
+          style={{ fontSize: `${settings.headerFontSize}pt` }}
+        >
           {data.name || "FirstName LastName"}
         </div>
-        <div className="text-gray-500 text-sm">
+        <div className="text-gray-500">
           {(data.address || "Street Address • City, State Zip") +
             " • " +
             (data.email || "youremail@example.com") +
@@ -77,6 +104,7 @@ export default function ResumeWegpage({ data }: { data: any }) {
       <h2
         key="edu-title"
         className="uppercase text-center text-base font-bold mb-2 border-b border-gray-500 pb-1 tracking-wider"
+        style={{ fontSize: `${settings.headerFontSize - 2}pt` }}
       >
         Education
       </h2>
@@ -89,18 +117,16 @@ export default function ResumeWegpage({ data }: { data: any }) {
               <span className="font-semibold">
                 {edu.school || "University Name"}
               </span>
-              <span className="text-sm">
+              <span>
                 {edu.city}, {edu.state}
               </span>
             </div>
             <div className="flex justify-between items-start">
-              <span className="text-sm">{edu.degree || "Degree, Major"}</span>
-              <span className="text-sm">{edu.date || "Graduation Date"}</span>
+              <span>{edu.degree || "Degree, Major"}</span>
+              <span>{edu.date || "Graduation Date"}</span>
             </div>
           </div>
-          {edu.details && (
-            <div className="text-sm text-gray-600">{edu.details}</div>
-          )}
+          {edu.details && <div className="text-gray-600">{edu.details}</div>}
         </div>
       );
     });
@@ -110,6 +136,7 @@ export default function ResumeWegpage({ data }: { data: any }) {
       <h2
         key="exp-title"
         className="uppercase text-center text-base font-bold mb-2 border-b border-gray-500 pb-1 tracking-wider mt-4"
+        style={{ fontSize: `${settings.headerFontSize - 2}pt` }}
       >
         Experience
       </h2>
@@ -120,7 +147,7 @@ export default function ResumeWegpage({ data }: { data: any }) {
           <div className="leading-none">
             <div className="flex justify-between items-start">
               <span className="font-semibold">{exp.org || "Organization"}</span>
-              <span className="text-sm">
+              <span>
                 {formatDateRange(exp.startDate, exp.endDate, exp.current) ||
                   "Month Year – Month Year"}
               </span>
@@ -129,13 +156,13 @@ export default function ResumeWegpage({ data }: { data: any }) {
               <span className="font-semibold">
                 {exp.role || "Position Title"}
               </span>
-              <span className="text-sm">
+              <span>
                 {exp.city}, {exp.state}
               </span>
             </div>
           </div>
 
-          <ul className="list-disc ml-6 text-sm space-y-1">
+          <ul className="list-disc ml-6 space-y-1">
             {(exp.bullets?.length
               ? exp.bullets
               : [
@@ -156,6 +183,7 @@ export default function ResumeWegpage({ data }: { data: any }) {
       <h2
         key="skills-title"
         className="uppercase text-center text-base font-bold mb-2 border-b border-gray-500 pb-1 tracking-wider mt-4"
+        style={{ fontSize: `${settings.headerFontSize - 2}pt` }}
       >
         Skills
       </h2>
@@ -164,13 +192,13 @@ export default function ResumeWegpage({ data }: { data: any }) {
       newBlocks.push(
         <div key={`skill-${idx}`} className="mb-2">
           <div className="font-bold">{cat.title}</div>
-          <div className="text-sm">{cat.items.filter(Boolean).join(" • ")}</div>
+          <div>{cat.items.filter(Boolean).join(" • ")}</div>
         </div>
       );
     });
 
     setBlocks(newBlocks);
-  }, [data]);
+  }, [data, settings]);
 
   // Measure & paginate
   useEffect(() => {
@@ -217,7 +245,12 @@ export default function ResumeWegpage({ data }: { data: any }) {
 
       {/* Render paginated blocks */}
       {pages.map((pageBlocks, i) => (
-        <Page key={i} pageNum={i + 1} totalPages={pages.length}>
+        <Page
+          key={i}
+          pageNum={i + 1}
+          totalPages={pages.length}
+          settings={settings}
+        >
           {pageBlocks}
         </Page>
       ))}
